@@ -58,7 +58,7 @@ namespace WebApi.ServiceModel.Wms
 								public long Insert_Imsn1(Imsn request)
 								{
 												long Result = -1;
-												int intResult = -1;
+												//int intResult = -1;
 												try
 												{
 																using (var db = DbConnectionFactory.OpenDbConnection("WMS"))
@@ -70,19 +70,19 @@ namespace WebApi.ServiceModel.Wms
 																								},
 																								p => p.TrxNo == int.Parse(request.Imgr2TrxNo) && p.LineItemNo == int.Parse(request.ReceiptLineItemNo)
 																				);
-																				string[] sns = request.SerialNos.Split(',');
-																				foreach (string sn in sns)
-																				{
-																								intResult = db.Scalar<int>(
-																												"Select count(*) From Imsn1 Where ReceiptNoteNo={0} And ReceiptLineItemNo={1} And SerialNo={2}",
-																												request.ReceiptNoteNo, request.ReceiptLineItemNo, sn
-																								);
-																								if (intResult < 1)
-																								{
-																												db.Insert(new Imsn1 { ReceiptNoteNo = request.ReceiptNoteNo, ReceiptLineItemNo = request.ReceiptLineItemNo, SerialNo = sn });
-																												Result = 1;
-																								}
-																				}																								
+																				//string[] sns = request.SerialNos.Split(',');
+																				//foreach (string sn in sns)
+																				//{
+																				//				intResult = db.Scalar<int>(
+																				//								"Select count(*) From Imsn1 Where ReceiptNoteNo={0} And ReceiptLineItemNo={1} And SerialNo={2}",
+																				//								request.ReceiptNoteNo, request.ReceiptLineItemNo, sn
+																				//				);
+																				//				if (intResult < 1)
+																				//				{
+																				//								db.Insert(new Imsn1 { ReceiptNoteNo = request.ReceiptNoteNo, ReceiptLineItemNo = request.ReceiptLineItemNo, SerialNo = sn });
+																				//								Result = 1;
+																				//				}
+																				//}																								
 																}
 												}
 												catch { throw; }

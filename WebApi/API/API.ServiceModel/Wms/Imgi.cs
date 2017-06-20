@@ -15,6 +15,8 @@ namespace WebApi.ServiceModel.Wms
     [Route("/wms/imgi2", "Get")]                //imgi2?GoodsIssueNoteNo=
     [Route("/wms/imgi2/picking", "Get")]                //picking?GoodsIssueNoteNo=
     [Route("/wms/imgi2/verify", "Get")]					//verify?GoodsIssueNoteNo=
+
+
     public class Imgi : IReturn<CommonResponse>
     {
         public string CustomerCode { get; set; }
@@ -87,7 +89,7 @@ namespace WebApi.ServiceModel.Wms
                                     "(Select Top 1 " + strBarCodeFiled + " From Impr1 Where TrxNo=Imgi2.ProductTrxNo) AS BarCode," +
                                     "(Select Top 1 SerialNoFlag From Impr1 Where TrxNo=Imgi2.ProductTrxNo) AS SerialNoFlag," +
                                     "(CASE Imgi2.DimensionFlag When '1' THEN Imgi2.PackingQty When '2' THEN Imgi2.WholeQty ELSE Imgi2.LooseQty END) AS Qty, " +
-                                    "0 AS QtyBal, 0 AS ScanQty " +
+                                    "0 AS QtyBal, 0 AS ScanQty ,IsNull(Imgi1.DeliveryToCode,'') AS DeliveryToCode,(Select Top 1 UserDefine1 From Impm1 Where TrxNo=Imgi2.ReceiptMovementTrxNo) AS UserDefine1 " +
                                     "From Imgi2 " +
                                     "Left Join Imgi1 On Imgi2.TrxNo=Imgi1.TrxNo " +
                                     "Where IsNull(Imgi1.StatusCode,'')='USE' And Imgi1.GoodsIssueNoteNo='" + request.GoodsIssueNoteNo + "'";

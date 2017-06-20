@@ -148,6 +148,7 @@ appControllers.controller('PickingDetailCtrl', [
             } else if (is.equal(type, 'DeliveryToCode') && is.not.equal($scope.Detail.Scan.DeliveryToCode, $scope.Detail.Imgi2.DeliveryToCode)) {
                 blnPass = false;
                 PopupService.Alert(popup, 'Invalid Delivery To Code').then();
+                $scope.Detail.Scan.DeliveryToCode='';
             } else if (is.equal(type, 'UserDefine1')) {
                 blnPass = false;
                 if (is.not.empty($scope.Detail.Scan.UserDefine1)) {
@@ -157,6 +158,7 @@ appControllers.controller('PickingDetailCtrl', [
                         $scope.Detail.Scan.UserDefine1 = SplitUserDefine1[1];
                         if (is.equal($scope.Detail.Scan.UserDefine1, $scope.Detail.Imgi2.UserDefine1)) {} else {
                             PopupService.Alert(popup, 'Wrong Batch No').then();
+                            $scope.Detail.Scan.UserDefine1='';
                             $('#txt-CustBatchNo').focus();
                         }
                     }
@@ -164,6 +166,7 @@ appControllers.controller('PickingDetailCtrl', [
 
                   }else{
                     PopupService.Alert(popup, 'Wrong Batch No').then();
+                        $scope.Detail.Scan.UserDefine1='';
                     $('#txt-CustBatchNo').focus();
                   }
 
