@@ -25,6 +25,7 @@ namespace WebApi.ServiceModel.Wms
         public string UserID { get; set; }
         public string StoreNo { get; set; }
         public string LineItemNo { get; set; }
+        public string UserDefine1 { get; set; }
     }
     public class Imgr_Logic
     {
@@ -221,7 +222,8 @@ namespace WebApi.ServiceModel.Wms
                     Result = db.Update<Imgr2>(
                                     new
                                     {
-                                        StoreNo = request.StoreNo
+                                        StoreNo = request.StoreNo,
+                                        UserDefine1=request .UserDefine1 
                                     },
                                     p => p.TrxNo == int.Parse(request.TrxNo) && p.LineItemNo == int.Parse(request.LineItemNo)
                     );
