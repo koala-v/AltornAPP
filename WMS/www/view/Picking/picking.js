@@ -101,9 +101,11 @@ appControllers.controller('PickingDetailCtrl', [
         var hmImgi2 = new HashMap();
         var hmImsn1 = new HashMap();
         var hmSeialNo = new HashMap();
+  var hmDisplayFlag= new HashMap();
         $scope.Detail = {
             Customer: $stateParams.CustomerCode,
             GIN: $stateParams.GoodsIssueNoteNo,
+
             Scan: {
                 StoreNo: '',
                 BarCode: '',
@@ -155,20 +157,29 @@ appControllers.controller('PickingDetailCtrl', [
                   if ($scope.Detail.Scan.UserDefine1.indexOf('..')>=0){
                     var SplitUserDefine1 = $scope.Detail.Scan.UserDefine1.split('..');
                     if (SplitUserDefine1.length > 0) {
+                      // var barcode = $scope.Detail.Scan.BarCode,
+                      //     imgi2 = hmImgi2.get(barcode);
                         $scope.Detail.Scan.UserDefine1 = SplitUserDefine1[1];
-                        if (is.equal($scope.Detail.Scan.UserDefine1, $scope.Detail.Imgi2.UserDefine1)) {} else {
-                            PopupService.Alert(popup, 'Wrong Batch No').then();
-                            $scope.Detail.Scan.UserDefine1='';
-                            $('#txt-CustBatchNo').focus();
-                        }
+                        $scope.Detail.Imgi2s[$scope.Detail.Imgi2.RowNum - 1].UserDefine1 = $scope.Detail.Scan.UserDefine1;
+                        hmDisplayFlag.set($scope.Detail.Imgi2s[$scope.Detail.Imgi2.RowNum - 1].LineItemNo, 'Y');
+                      // $scope.DilplayFlag  ='Y';
+                        // if (is.equal($scope.Detail.Scan.UserDefine1, $scope.Detail.Imgi2.UserDefine1)) {} else {
+                        //     PopupService.Alert(popup, 'Wrong Batch No').then();
+                        //     $scope.Detail.Scan.UserDefine1='';
+                        //     $('#txt-CustBatchNo').focus();
+                        // }
                     }
-                  }else if(is.equal($scope.Detail.Scan.UserDefine1, $scope.Detail.Imgi2.UserDefine1)){
-
                   }else{
-                    PopupService.Alert(popup, 'Wrong Batch No').then();
-                        $scope.Detail.Scan.UserDefine1='';
-                    $('#txt-CustBatchNo').focus();
+                    $scope.Detail.Imgi2s[$scope.Detail.Imgi2.RowNum - 1].UserDefine1 = $scope.Detail.Scan.UserDefine1;
+  hmDisplayFlag.set($scope.Detail.Imgi2s[$scope.Detail.Imgi2.RowNum - 1].LineItemNo, 'Y');
                   }
+                  // else if(is.equal($scope.Detail.Scan.UserDefine1, $scope.Detail.Imgi2.UserDefine1)){
+                  //
+                  // }else{
+                  //   PopupService.Alert(popup, 'Wrong Batch No').then();
+                  //       $scope.Detail.Scan.UserDefine1='';
+                  //   $('#txt-CustBatchNo').focus();
+                  // }
 
                 }
 
@@ -302,8 +313,11 @@ appControllers.controller('PickingDetailCtrl', [
                     QtyBal: $scope.Detail.Imgi2s[row].Qty - $scope.Detail.Imgi2s[row].ScanQty,
                     UserDefine1: $scope.Detail.Imgi2s[row].UserDefine1,
                     DeliveryToCode: $scope.Detail.Imgi2s[row].DeliveryToCode
-
                 };
+
+              if (  hmDisplayFlag.get($scope.Detail.Imgi2s[row].LineItemNo) ==='Y'){
+                $scope.Detail.Scan.UserDefine1=$scope.Detail.Imgi2.UserDefine1;
+              }
                 $scope.Detail.Scan.Qty = $scope.Detail.Imgi2s[row].ScanQty;
             }
             if (is.equal(row, $scope.Detail.Imgi2s.length - 1)) {
