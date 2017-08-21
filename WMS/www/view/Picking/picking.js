@@ -101,7 +101,7 @@ appControllers.controller('PickingDetailCtrl', [
         var hmImgi2 = new HashMap();
         var hmImsn1 = new HashMap();
         var hmSeialNo = new HashMap();
-  var hmDisplayFlag= new HashMap();
+        var hmDisplayFlag = new HashMap();
         $scope.Detail = {
             Customer: $stateParams.CustomerCode,
             GIN: $stateParams.GoodsIssueNoteNo,
@@ -150,39 +150,44 @@ appControllers.controller('PickingDetailCtrl', [
             } else if (is.equal(type, 'DeliveryToCode') && is.not.equal($scope.Detail.Scan.DeliveryToCode, $scope.Detail.Imgi2.DeliveryToCode)) {
                 blnPass = false;
                 PopupService.Alert(popup, 'Invalid Delivery To Code').then();
-                $scope.Detail.Scan.DeliveryToCode='';
+                $scope.Detail.Scan.DeliveryToCode = '';
             } else if (is.equal(type, 'UserDefine1')) {
                 blnPass = false;
                 if (is.not.empty($scope.Detail.Scan.UserDefine1)) {
-                  if ($scope.Detail.Scan.UserDefine1.indexOf('..')>=0){
-                    var SplitUserDefine1 = $scope.Detail.Scan.UserDefine1.split('..');
-                    if (SplitUserDefine1.length > 0) {
-                      // var barcode = $scope.Detail.Scan.BarCode,
-                      //     imgi2 = hmImgi2.get(barcode);
-                        $scope.Detail.Scan.UserDefine1 = SplitUserDefine1[1];
+                    if ($scope.Detail.Scan.UserDefine1.indexOf('..') >= 0) {
+                        var SplitUserDefine1 = $scope.Detail.Scan.UserDefine1.split('..');
+                        if (SplitUserDefine1.length > 0) {
+                            var barcode = $scope.Detail.Scan.BarCode,
+                                imgi2 = hmImgi2.get(barcode);
+                                $scope.Detail.Scan.UserDefine1 = SplitUserDefine1[1];
+                              if (is.equal($scope.Detail.Scan.UserDefine1, $scope.Detail.Imgi2.UserDefine1)) {
+                                  $scope.Detail.Imgi2s[$scope.Detail.Imgi2.RowNum - 1].UserDefine1 = $scope.Detail.Scan.UserDefine1;
+                                hmDisplayFlag.set($scope.Detail.Imgi2s[$scope.Detail.Imgi2.RowNum - 1].LineItemNo, 'Y');
+                            } else {
+                                PopupService.Alert(popup, 'Wrong Batch No 1-->Scan：' +  $scope.Detail.Scan.UserDefine1+' 2-->Database:'+$scope.Detail.Imgi2.UserDefine1).then();
+                                $scope.Detail.Scan.UserDefine1='';
+                                $('#txt-UserDefine1').focus();
+                            }
+                        }
+                    } else {
+                      if(is.equal($scope.Detail.Scan.UserDefine1, $scope.Detail.Imgi2.UserDefine1)){
                         $scope.Detail.Imgi2s[$scope.Detail.Imgi2.RowNum - 1].UserDefine1 = $scope.Detail.Scan.UserDefine1;
                         hmDisplayFlag.set($scope.Detail.Imgi2s[$scope.Detail.Imgi2.RowNum - 1].LineItemNo, 'Y');
-                      // $scope.DilplayFlag  ='Y';
-                        // if (is.equal($scope.Detail.Scan.UserDefine1, $scope.Detail.Imgi2.UserDefine1)) {} else {
-                        //     PopupService.Alert(popup, 'Wrong Batch No').then();
-                        //     $scope.Detail.Scan.UserDefine1='';
-                        //     $('#txt-CustBatchNo').focus();
-                        // }
-                    }
-                  }else{
-                    $scope.Detail.Imgi2s[$scope.Detail.Imgi2.RowNum - 1].UserDefine1 = $scope.Detail.Scan.UserDefine1;
-  hmDisplayFlag.set($scope.Detail.Imgi2s[$scope.Detail.Imgi2.RowNum - 1].LineItemNo, 'Y');
-                  }
-                  // else if(is.equal($scope.Detail.Scan.UserDefine1, $scope.Detail.Imgi2.UserDefine1)){
-                  //
-                  // }else{
-                  //   PopupService.Alert(popup, 'Wrong Batch No').then();
-                  //       $scope.Detail.Scan.UserDefine1='';
-                  //   $('#txt-CustBatchNo').focus();
-                  // }
+                      }else{
+                        PopupService.Alert(popup, 'Wrong Batch No 1-->Scan：' +  $scope.Detail.Scan.UserDefine1+' 2-->Database:'+$scope.Detail.Imgi2.UserDefine1).then();
+                              $scope.Detail.Scan.UserDefine1='';
+                          $('#txt-UserDefine1').focus();
+                      }
+                      }
+                    // else if(is.equal($scope.Detail.Scan.UserDefine1, $scope.Detail.Imgi2.UserDefine1)){
+                    //
+                    // }else{
+                    //   PopupService.Alert(popup, 'Wrong Batch No').then();
+                    //       $scope.Detail.Scan.UserDefine1='';
+                    //   $('#txt-CustBatchNo').focus();
+                    // }
 
                 }
-
 
             } else if (is.equal(type, 'BarCode') && is.not.equal($scope.Detail.Scan.BarCode, $scope.Detail.Imgi2.BarCode)) {
                 blnPass = false;
@@ -315,9 +320,9 @@ appControllers.controller('PickingDetailCtrl', [
                     DeliveryToCode: $scope.Detail.Imgi2s[row].DeliveryToCode
                 };
 
-              if (  hmDisplayFlag.get($scope.Detail.Imgi2s[row].LineItemNo) ==='Y'){
-                $scope.Detail.Scan.UserDefine1=$scope.Detail.Imgi2.UserDefine1;
-              }
+                if (hmDisplayFlag.get($scope.Detail.Imgi2s[row].LineItemNo) === 'Y') {
+                    $scope.Detail.Scan.UserDefine1 = $scope.Detail.Imgi2.UserDefine1;
+                }
                 $scope.Detail.Scan.Qty = $scope.Detail.Imgi2s[row].ScanQty;
             }
             if (is.equal(row, $scope.Detail.Imgi2s.length - 1)) {
