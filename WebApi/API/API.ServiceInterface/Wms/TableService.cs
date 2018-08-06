@@ -42,6 +42,10 @@ namespace WebApi.ServiceInterface.Wms
                 {
                     ecr.data.results = imgr_Logic.Update_Imgr2_StoreNo(request);
                 }
+                else if (uri.IndexOf("/wms/imgr2/putaway/CheckExist") > 0)
+                {
+                    ecr.data.results = imgr_Logic.Imgr2CheckExist(request);
+                }
                 else if (uri.IndexOf("/wms/imgr2/putaway") > 0)
                 {
                     ecr.data.results = imgr_Logic.Get_Imgr2_Putaway_List(request);

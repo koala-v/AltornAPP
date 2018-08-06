@@ -15,6 +15,7 @@ namespace WebApi.ServiceModel.Wms
     [Route("/wms/imgr2/receipt", "Get")]                //receipt?GoodsReceiptNoteNo=
     [Route("/wms/imgr2/putaway", "Get")]                //putaway?GoodsReceiptNoteNo=
     [Route("/wms/imgr2/putaway/update", "Get")]             //update?StoreNo= & TrxNo= & LineItemNo=
+    [Route("/wms/imgr2/putaway/CheckExist", "Get")]             //update?StoreNo= & TrxNo= & LineItemNo=
     [Route("/wms/imgr2/transfer", "Get")]			//transfer?GoodsReceiptNoteNo=
     public class Imgr : IReturn<CommonResponse>
     {
@@ -161,6 +162,24 @@ namespace WebApi.ServiceModel.Wms
             catch { throw; }
             return Result;
         }
+
+        public List<Imgr2_Putaway> Imgr2CheckExist(Imgr request) 
+        {
+            List<Imgr2_Putaway> Result = null;
+            try
+            {
+                using (var db = DbConnectionFactory.OpenDbConnection("WMS"))
+                {
+                    string strSql = "Select StatusCode From Imgr1 " +
+                                    "Where TrxNo='" + request.TrxNo + "'";
+                    Result = db.Select<Imgr2_Putaway>(strSql);
+                }
+            }
+            catch { throw; }
+            return Result;
+        }
+
+        
         public List<Imgr2_Transfer> Get_Imgr2_Transfer_List(Imgr request)
         {
             List<Imgr2_Transfer> Result = null;
@@ -238,7 +257,7 @@ namespace WebApi.ServiceModel.Wms
                         {
                             for (int i = 0; i < Result1.Count; i++)
                             {
-                                Result = db.SqlScalar<int>("Update Imgr2 Set MovementTrxNo=(Select TrxNo From Impm1 Where BatchNo=@GoodsReceiptNoteNo And BatchLineItemNo=@BatchLineItemNo And CustomerCode=@CustomerCode) Where TrxNo=@TrxNo  And LineItemNo=@LineItemNo", new { GoodsReceiptNoteNo = Result1[i].GoodsReceiptNoteNo, BatchLineItemNo = Result1[i].LineItemNo, CustomerCode = Result1[i].CustomerCode, TrxNo = int.Parse(request.TrxNo), LineItemNo = Result1[i].LineItemNo });
+                                Result = db.SqlScalar<int>("Update Imgr2 Set MovementTrxNo=(Select  top 1 TrxNo From Impm1 Where BatchNo=@GoodsReceiptNoteNo And BatchLineItemNo=@BatchLineItemNo And CustomerCode=@CustomerCode) Where TrxNo=@TrxNo  And LineItemNo=@LineItemNo", new { GoodsReceiptNoteNo = Result1[i].GoodsReceiptNoteNo, BatchLineItemNo = Result1[i].LineItemNo, CustomerCode = Result1[i].CustomerCode, TrxNo = int.Parse(request.TrxNo), LineItemNo = Result1[i].LineItemNo });
                             }
                         }
                     }

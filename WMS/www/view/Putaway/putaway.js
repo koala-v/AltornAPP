@@ -195,6 +195,27 @@ appControllers.controller('PutawayListCtrl', [
                 $scope.Imgr2s[imgr2.LineItemNo - 1].UserDefine1 = '';
             }
         };
+
+        var CheckSatusCode= function(){
+          var objUri = ApiService.Uri(true, '/api/wms/imgr2/putaway/CheckExist');
+          objUri.addSearch('TrxNo',   $scope.Imgr2s[0].TrxNo);
+          ApiService.Get(objUri, true).then(function success(result) {
+           var results =  result.data.results;
+           if (results.length >0 )
+           {
+               if(results[0].StatusCode ==='USE')
+               {
+                   confirm();
+               }
+               else {
+                 PopupService.Alert(popup, 'Alreadyed Confirm').then(function () {
+                 });
+               }
+
+           }
+            });
+        };
+
         $scope.checkConfirm = function () {
             $ionicLoading.show();
             var blnDiscrepancies = false;
@@ -214,7 +235,8 @@ appControllers.controller('PutawayListCtrl', [
                 $ionicLoading.hide();
                 PopupService.Alert(popup, 'Some Products Has Not Yet Putaway').then();
             } else {
-                confirm();
+              CheckSatusCode();
+
             }
         };
     }

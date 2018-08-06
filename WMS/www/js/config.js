@@ -11,7 +11,7 @@ appConfig.constant('ENV', {
         port:         '8081'
     },
     ssl:          false, // 0 : false, 1 : true
-    //  port:         '52603', // http port no
+     // port:         '52603', // http port no
     port:         '8081',
     debug:        true,
     mock:         false,
@@ -31,7 +31,7 @@ appConfig.constant('ENV', {
     updateFile:   'update.json',
     rootPath:     'Altron',
     configFile:   'config.txt',
-    version:      '1.0.1.2',
+    version:      '1.0.1.3',
     parameter: {
         showSerialNo : true
     },

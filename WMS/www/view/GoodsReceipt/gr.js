@@ -468,7 +468,8 @@ appControllers.controller('GrDetailCtrl', [
                             $scope.openModal();
                         });
                     } else {
-                        sendConfirm();
+
+                      sendConfirm();
                     }
                 } else {
                     $ionicLoading.hide();
@@ -535,6 +536,7 @@ appControllers.controller('GrDetailCtrl', [
                 });
             });
         };
+
         var GetImgr2ProductCode = function (GoodsReceiptNoteNo) {
             var objUri = ApiService.Uri(true, '/api/wms/imgr2/receipt');
             objUri.addSearch('GoodsReceiptNoteNo', GoodsReceiptNoteNo);

@@ -17,5 +17,7 @@ namespace WebApi.ServiceModel.Tables
         public string UserDefine1 { get; set; }
         public string GoodsReceiptNoteNo { get; set; }
         public int Qty { get; set; }
+        public string StatusCode  { get; set; }
+        
     }
 }
